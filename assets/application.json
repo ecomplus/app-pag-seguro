@@ -1,11 +1,20 @@
 {
   "app_id": 109126,
-  "title": "My Awesome E-Com Plus App",
-  "slug": "my-awesome-ecom-plus-app",
+  "title": "Pagseguro",
+  "slug": "pag-seguro",
   "type": "external",
   "state": "active",
   "authentication": true,
-  "modules": {},
+  "modules": {
+    "list_payments": {
+      "enabled": true,
+      "endpoint": "https://us-central1-ecom-pagseguro.cloudfunctions.net/app/ecom/modules/list-payments"
+    },
+    "create_transaction": {
+      "enabled": true,
+      "endpoint": "https://us-central1-ecom-pagseguro.cloudfunctions.net/app/ecom/modules/create-transaction"
+    }
+  },
   "auth_scope": {
     "stores/me": [
       "GET"
@@ -13,18 +22,15 @@
     "procedures": [
       "POST"
     ],
-    "products": [],
-    "brands": [],
-    "categories": [],
-    "customers": [],
-    "orders": [],
-    "carts": [],
-    "orders/fulfillments": [],
-    "orders/payments_history": [],
-    "products/quantity": [],
-    "products/variations/quantity": [],
-    "products/price": [],
-    "products/variations/price": []
+    "orders": [
+      "GET",
+      "POST"
+    ],
+    "orders/payments_history": [
+      "GET",
+      "POST",
+      "PATCH"
+    ]
   },
   "auth_callback_uri": "https://us-central1-ecom-pagseguro.cloudfunctions.net/app/ecom/auth-callback",
   "version": "1.0.0"
