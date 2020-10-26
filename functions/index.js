@@ -20,6 +20,12 @@ const routes = './routes'
 // enable/disable some E-Com common routes based on configuration
 const { app, procedures } = require('./ecom.config')
 
+// envs
+const { pagseguro } = require('firebase-functions').config()
+process.env.PS_APP_KEY = pagseguro.app_key
+process.env.PS_APP_ID = pagseguro.app_id
+process.env.PS_APP_SANDBOX = pagseguro.sandbox || false
+
 // handle app authentication to Store API
 // https://github.com/ecomplus/application-sdk
 const { ecomServerIps, setup } = require('@ecomplus/application-sdk')
