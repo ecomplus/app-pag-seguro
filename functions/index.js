@@ -134,3 +134,4 @@ server.use(express.static('public'))
 
 exports[functionName] = functions.https.onRequest(server)
 console.log(`-- Starting '${app.title}' E-Com Plus app with Function '${functionName}'`)
+exports.scheduledFunction = functions.pubsub.schedule('every 12 hours').onRun(require('./lib/pagseguro/transactions-updater'))
