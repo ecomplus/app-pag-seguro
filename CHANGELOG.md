@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0 (2020-10-26)
+
+
+### Features
+
+* **cron:** pagseguro transactions updater ([1349ee5](https://github.com/ecomplus/application-starter/commit/1349ee526e809559e73fd99eb55fff816f06385e))
+* **pagseguro:** api client ([70b4914](https://github.com/ecomplus/application-starter/commit/70b491499f871b48346c72b1f66fa7f92f2bbe2a))
+* **routes:** module create-transaction ([ea16b88](https://github.com/ecomplus/application-starter/commit/ea16b88f356006e7d23e91525c9fbcd2431bb602))
+* **routes:** module list-payments ([48d2681](https://github.com/ecomplus/application-starter/commit/48d26814bdf51a68a87d70e75f914225c1f39f8c))
+* **routes:** pagseguro authentication callback ([49ed8fa](https://github.com/ecomplus/application-starter/commit/49ed8fab7b9fd908e57a116e2efd161b6fc13074))
+* **routes:** pagseguro notifications handler ([a63955f](https://github.com/ecomplus/application-starter/commit/a63955f1c955a86e0d29b7b08cad254470ca5dce))
+* **routes:** pagseguro request authentication ([c4d6eee](https://github.com/ecomplus/application-starter/commit/c4d6eee017a6735d8bc6fdcfba4ac0d3964cc5b6))
+
 ## [1.0.0-starter.15](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.14...v1.0.0-starter.15) (2020-07-26)
 
 
