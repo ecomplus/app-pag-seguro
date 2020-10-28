@@ -303,18 +303,18 @@ exports.post = ({ admin }, req, res) => {
             }
 
             err.pagseguroErrorJSON = error
-            res.status(400).send({
-              error: 'CREATE_TRANSACTION_ERR',
-              message,
-              errors
-            })
           }
+
+          res.status(400).send({
+            error: 'CREATE_TRANSACTION_ERR',
+            message
+          })
         }
 
         // debug axios request error stack
         err.storeId = storeId
         err.orderNumber = params.order_number
-        return console.error(err)
+        return logger.error(err)
       }
     })
 }
