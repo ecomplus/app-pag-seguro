@@ -88,7 +88,7 @@ exports.post = ({ admin, appSdk }, req, res) => {
               ).toFixed(2)
             },
             holder: {
-              name: params.credit_card.holder_name,
+              name: String(params.credit_card.holder_name).substr(0, 50),
               documents: {
                 document: {
                   type: params.buyer.registry_type === 'p' ? 'CPF' : 'CNPJ',
@@ -106,13 +106,13 @@ exports.post = ({ admin, appSdk }, req, res) => {
               }
             },
             billingAddress: {
-              street: trimString(address.street),
+              street: String(trimString(address.street)).substr(0, 80),
               number: address.number || 'SN',
-              district: address.borough || '',
-              city: address.city,
-              state: address.province_code,
+              district: String(address.borough || '').substr(0, 60),
+              city: String(address.city).substr(0, 60),
+              state: String(address.province_code).substr(0, 2),
               country: 'BRA',
-              postalCode: address.zip
+              postalCode: String(address.zip).substr(0,8)
             }
           }
         }
@@ -190,7 +190,7 @@ exports.post = ({ admin, appSdk }, req, res) => {
                 },
                 'transaction_id': transaction.code,
                 'transaction_code': transaction.code,
-                'transaction_reference': transaction.reference
+                'transaction_reference': String(transaction.reference)
               },
               'status': {
                 'current': paymentStatus(transaction.status)
@@ -212,7 +212,7 @@ exports.post = ({ admin, appSdk }, req, res) => {
                 },
                 'transaction_id': transaction.code,
                 'transaction_code': transaction.code,
-                'transaction_reference': transaction.reference
+                'transaction_reference': String(transaction.reference)
               },
               'payment_link': transaction.paymentLink,
               'status': {
@@ -244,7 +244,7 @@ exports.post = ({ admin, appSdk }, req, res) => {
                 },
                 'transaction_id': transaction.code,
                 'transaction_code': transaction.code,
-                'transaction_reference': transaction.reference
+                'transaction_reference': String(transaction.reference)
               },
               'payment_link': transaction.paymentLink,
               'status': {

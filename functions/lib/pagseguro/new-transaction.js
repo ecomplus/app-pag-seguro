@@ -6,11 +6,11 @@ module.exports = params => {
   const address = params.to || params.billing_address
 
   const notificationURL = baseUri + '/pagseguro/notifications'
-  
+
   const payload = {
     sender: {
-      name: buyer.fullname,
-      email: buyer.email,
+      name: String(buyer.fullname).substr(0, 50),
+      email: 'c84867540252603566692@sandbox.pagseguro.com.br', //String(buyer.email).substr(0, 60),
       phone: {
         areaCode: buyer.phone.number.substr(0, 2),
         number: buyer.phone.number.substr(2, buyer.phone.number)
@@ -26,17 +26,17 @@ module.exports = params => {
     currency: 'BRL',
     notificationURL,
     items: [],
-    reference: params.order_number,
+    reference: String(params.order_number).substr(0, 200),
     shippingAddressRequired: true,
     shipping: {
       address: {
-        street: trimString(address.street),
-        number: address.number || 'SN',
-        district: address.borough || '',
-        city: address.city,
-        state: address.province_code,
+        street: String(trimString(address.street)).substr(0, 80),
+        number: String(address.number || 'SN'),
+        district: String(address.borough || '').substr(0, 60),
+        city: String(address.city).substr(0, 60),
+        state: String(address.province_code).substr(0, 2),
         country: 'BRA',
-        postalCode: address.zip
+        postalCode: String(address.zip).substr(0, 8)
       },
       cost: params.amount && params.amount.freight ? params.amount.freight : 0
     },
@@ -44,14 +44,16 @@ module.exports = params => {
   }
 
   params.items.forEach(item => {
-    payload.items.push({
-      item: {
-        id: item.sku,
-        description: item.name,
-        quantity: item.quantity,
-        amount: parseFloat(item.final_price || item.price).toFixed(2)
-      }
-    })
+    if (item.final_price > 0 || item.price > 0) {
+      payload.items.push({
+        item: {
+          id: String(item.sku).substr(0, 100),
+          description: String(item.name).substr(0, 100),
+          quantity: item.quantity,
+          amount: parseFloat(item.final_price || item.price).toFixed(2)
+        }
+      })
+    }
   })
 
   return payload
