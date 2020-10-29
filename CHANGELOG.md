@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ecomplus/application-starter/compare/v1.0.0...v1.1.0) (2020-10-29)
+
+
+### Features
+
+* **create-transaction:** save error on hidden_metafield when status is 400 ([87ede85](https://github.com/ecomplus/application-starter/commit/87ede85aae7ae32dce73ef18a0a3ff78e129a1fc))
+
+
+### Bug Fixes
+
+* **create-transaction:** returning error for status 400 ([c97a919](https://github.com/ecomplus/application-starter/commit/c97a9190fb3aacc054a4c30f4a721c1d3a0ee209))
+
 ## 1.0.0 (2020-10-26)
 
 
