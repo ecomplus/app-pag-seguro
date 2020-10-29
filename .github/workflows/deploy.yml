@@ -5,6 +5,7 @@ on:
     branches:
       - master
     paths:
+      - '.github/workflows/deploy.yml'
       - 'functions/**'
       - 'scripts/_constants.js'
       - 'scripts/firebase-deploy.js'
@@ -27,19 +28,11 @@ jobs:
         with:
           node-version: '10.x'
 
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install root dependencies
-        run: npm ci --only=production
+        run: npm i --only=production
 
       - name: Install functions dependencies
-        run: cd functions && npm ci --only=production --no-optional && cd ..
+        run: cd functions && npm i --only=production --no-optional && cd ..
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
