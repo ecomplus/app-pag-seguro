@@ -10,7 +10,7 @@ module.exports = params => {
   const payload = {
     sender: {
       name: String(buyer.fullname).substr(0, 50),
-      email: 'c84867540252603566692@sandbox.pagseguro.com.br', //String(buyer.email).substr(0, 60),
+      email: String(buyer.email).substr(0, 60),
       phone: {
         areaCode: buyer.phone.number.substr(0, 2),
         number: buyer.phone.number.substr(2, buyer.phone.number)
