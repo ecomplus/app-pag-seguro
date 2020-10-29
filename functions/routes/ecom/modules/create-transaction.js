@@ -1,12 +1,11 @@
-const xmlToJSON = require('xml2json')
 const newTransaction = require('../../../lib/pagseguro/new-transaction')
 const pgClient = require('./../../../lib/pagseguro/client')
 const pgGetAuth = require('./../../../lib/pagseguro/get-auth')
 const pgGetInstallments = require('./../../../lib/pagseguro/fetch-installments')
 const { convertDate, paymentStatus, trimString } = require('./../../../lib/pagseguro/utils')
-const jstoXML = require('../../../lib/pagseguro/js-to-xml')
+const { jsToXML, xmlToJson } = require('../../../lib/pagseguro/js-to-xml')
 
-exports.post = ({ admin }, req, res) => {
+exports.post = ({ admin, appSdk }, req, res) => {
   const { params } = req.body
   const storeId = req.storeId
   console.log(`Transaction #${storeId} ${params.order_number}`)
@@ -144,7 +143,7 @@ exports.post = ({ admin }, req, res) => {
     }
 
     let xml = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'
-    xml += jstoXML({ payment })
+    xml += jsToXML({ payment })
 
     const { Timestamp } = require('firebase-admin').firestore
 
@@ -261,60 +260,66 @@ exports.post = ({ admin }, req, res) => {
     })
   }
 
-  return pgGetAuth({ storeId, admin }).then(doPayment)
-    .catch(err => {
-      console.log(err)
-      let message = err.message
-      if (err.name === 'AuthNotFound') {
-        return res.status(409).send({
-          error: 'AUTH_ERROR',
-          message: 'Autenticação não encontrada. Aplicativo não foi instalado corretamente.'
+  return pgGetAuth({ storeId, admin }).then(doPayment).catch(err => {
+    let message = err.message
+    let errorResponse = {}
+    if (typeof err.toJSON === 'function') {
+      errorResponse = err.toJSON()
+    }
+
+    errorResponse.store_id = storeId
+    errorResponse.order_number = params.order_number
+    if (err.name === 'AuthNotFound') {
+      return res.status(409).send({
+        error: 'AUTH_ERROR',
+        message: 'Autenticação não encontrada. Aplicativo não foi instalado corretamente.'
+      })
+    } else {
+      const { status, headers } = err.response
+      console.log(`PagSeguro ${status} response for #${storeId} ${params.order_number}`)
+      // treat some PagSeguro response status
+      if (status === 403 || status >= 500) {
+        res.status(status || 403).send({
+          error: 'CREATE_TRANSACTION_PS_ERR',
+          message: 'PagSeguro seems to be offline, try again later'
         })
-      } else {
-        const { status, headers } = err.response
-        console.log(`PagSeguro ${status} response for #${storeId} ${params.order_number}`)
-        // treat some PagSeguro response status
-        if (status === 403 || status >= 500) {
-          res.status(status || 403).send({
-            error: 'CREATE_TRANSACTION_PS_ERR',
-            message: 'PagSeguro seems to be offline, try again later'
-          })
-        } else if (status === 401) {
-          res.status(401).send({
-            error: 'TRANSACTION_PS_AUTH_ERR',
-            message: 'PagSeguro authentication error, please try another playment method'
-          })
-        } else if (status === 400) {
-          if (headers['content-type'] === 'application/xml;charset=ISO-8859-1' &&
-            (err.response && err.response.data) &&
-            typeof err.response.data === 'string') {
-            const error = JSON.parse(xmlToJSON.toJson(err.response.data))
-
-            const { errors } = error
-            if (errors && errors.error) {
-              if (Array.isArray(errors.error)) {
-                message = ''
-                errors.error.forEach(e => {
-                  message += `${e.message} | `
-                })
-              } else {
-                message = errors.error.message
-              }
+      } else if (status === 401) {
+        res.status(401).send({
+          error: 'TRANSACTION_PS_AUTH_ERR',
+          message: 'PagSeguro authentication error, please try another playment method'
+        })
+      } else if (status === 400) {
+        if (headers['content-type'] === 'application/xml;charset=ISO-8859-1' &&
+          (err.response && err.response.data) &&
+          typeof err.response.data === 'string') {
+          const error = xmlToJson(err.response.data)
+          const { errors } = error
+          if (errors && errors.error) {
+            if (Array.isArray(errors.error)) {
+              message = ''
+              errors.error.forEach(e => {
+                message += `${e.message} | `
+              })
+            } else {
+              message = errors.error.message
             }
-
-            err.pagseguroErrorJSON = error
           }
 
-          res.status(400).send({
-            error: 'CREATE_TRANSACTION_ERR',
-            message
-          })
+          errorResponse.message = message
+          errorResponse.data = error
         }
 
-        // debug axios request error stack
-        err.storeId = storeId
-        err.orderNumber = params.order_number
-        return logger.error(err)
+        res.status(400).send({
+          error: 'CREATE_TRANSACTION_ERR',
+          message
+        })
       }
-    })
+      console.error(JSON.stringify(errorResponse, undefined, 2))
+      return appSdk.apiRequest(storeId, `/orders/${params.order_id}/hidden_metafields.json`, 'POST', {
+        namespace: 'app-pag-seguro',
+        field: 'CREATE_TRANSACTION_ERR',
+        value: String(message).substring(0, 255)
+      })
+    }
+  })
 }
