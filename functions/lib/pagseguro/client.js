@@ -1,6 +1,5 @@
 const axios = require('axios')
-const xmlToJson = require('xml2json')
-
+const { xmlToJson} = require('./js-to-xml')
 const baseURL = Boolean(process.env.PS_APP_SANDBOX) === true ? 'https://ws.sandbox.pagseguro.uol.com.br' : 'https://ws.pagseguro.uol.com.br'
 
 const instance = axios.create({
@@ -37,7 +36,7 @@ module.exports = ({ url, method, authorizationCode, appId, appKey, data, toJSON 
     if (toJSON === false) {
       return data
     } else {
-      return JSON.parse(xmlToJson.toJson(data))
+      return xmlToJson(data)
     }
   })
 }

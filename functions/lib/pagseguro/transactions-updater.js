@@ -3,6 +3,7 @@ const { firestore } = require('firebase-admin')
 const { setup } = require('@ecomplus/application-sdk')
 const pgClient = require('./client')
 const { paymentStatus } = require('./utils')
+const { xmlToJson } = require('./js-to-xml')
 
 const listStoreIds = () => {
   const storeIds = []
@@ -26,11 +27,11 @@ const listStoreIds = () => {
 const checkTransactions = ({ appSdk, storeId }) => {
   const date = new Date()
   date.setDate(date.getDate() - 7)
-  const url = 'orders.json?fields=_id,transactions,payments_history,financial_status' +
-    '&transactions.app.intermediator.code=pagseguro' +
-    `&created_at>=${date.toISOString()}` +
-    '&sort=financial_status.updated_at' +
-    '&limit=20'
+  const url = 'orders.json?fields=_id,transactions,payments_history,financial_status&' +
+    'transactions.app.intermediator.code=pagseguro&' +
+    `created_at>=${date.toISOString()}&` +
+    'sort=financial_status.updated_at&' +
+    'limit=20'
 
   return appSdk.apiRequest(storeId, url).then(({ response }) => {
     const { result } = response.data
@@ -86,7 +87,7 @@ const checkTransactions = ({ appSdk, storeId }) => {
 
               if (data && typeof data === 'string' && headers['content-type'] === 'application/xml;charset=ISO-8859-1') {
                 try {
-                  const error = JSON.parse(xmlToJSON.toJson(data))
+                  const error = xmlToJson(data)
                   failed.pagseguroError = error
                 } catch (error) {
                   // igy igy 

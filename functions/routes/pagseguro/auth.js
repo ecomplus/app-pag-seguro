@@ -1,6 +1,7 @@
-const { toXML } = require('jstoxml')
 const pgClient = require('./../../lib/pagseguro/client')
 const { baseUri } = require('./../../__env')
+const { jsToXML } = require('./../../lib/pagseguro/js-to-xml')
+
 exports.get = ({ appSdk }, req, res) => {
   const { query } = req
   const storeId = query.x_store_id || query.storeId || query.store_id || req.get('x-store-id')
@@ -30,7 +31,7 @@ exports.get = ({ appSdk }, req, res) => {
   }
 
   let xml = '<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>'
-  xml += toXML(authConfig)
+  xml += jsToXML(authConfig)
 
   return pgClient({
     url: '/v2/authorizations/request',
