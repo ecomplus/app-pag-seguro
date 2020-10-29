@@ -64,6 +64,9 @@ const app = {
       'GET',           // List/read order payments history events
       'POST',          // Create payments history entry with new status
       'PATCH',        // Delete payments history entry
+    ],
+    'orders/hidden_metafields': [
+      "POST"
     ]
   }
 }
