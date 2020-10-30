@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/ecomplus/application-starter/compare/v1.1.1...v1.1.2) (2020-10-30)
+
+
+### Bug Fixes
+
+* **deps:** dedupe and update non-major dependencies ([ed49861](https://github.com/ecomplus/application-starter/commit/ed498616613c02e7ef66bc2e20ea2ee16c87191b))
+* **deps:** save @google-cloud/firestore as direct dependency ([14f0db4](https://github.com/ecomplus/application-starter/commit/14f0db436fe5b813860185637eb67cbf81147f21))
+
 ### [1.1.1](https://github.com/ecomplus/application-starter/compare/v1.1.0...v1.1.1) (2020-10-29)
 
 ## [1.1.0](https://github.com/ecomplus/application-starter/compare/v1.0.0...v1.1.0) (2020-10-29)
