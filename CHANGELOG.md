@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/ecomplus/application-starter/compare/v1.1.2...v1.1.3) (2020-11-05)
+
+
+### Bug Fixes
+
+* **ecom.config.js:** applications admin_settings ([372cebb](https://github.com/ecomplus/application-starter/commit/372cebb3f6c4c502c09f2aaf27329e7c5802eb3f))
+* remove parse from process.env.PS_APP_SANDBOX ([a8047af](https://github.com/ecomplus/application-starter/commit/a8047af0f56f96a59b7a11c8b140574e7a984451))
+
 ### [1.1.2](https://github.com/ecomplus/application-starter/compare/v1.1.1...v1.1.2) (2020-10-30)
 
 
