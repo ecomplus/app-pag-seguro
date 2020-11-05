@@ -24,7 +24,7 @@ const { app, procedures } = require('./ecom.config')
 const { pagseguro } = require('firebase-functions').config()
 process.env.PS_APP_KEY = pagseguro.app_key
 process.env.PS_APP_ID = pagseguro.app_id
-process.env.PS_APP_SANDBOX = pagseguro.sandbox || false
+process.env.PS_APP_SANDBOX = (pagseguro.sandbox && pagseguro.sandbox === 'true')
 
 // handle app authentication to Store API
 // https://github.com/ecomplus/application-sdk

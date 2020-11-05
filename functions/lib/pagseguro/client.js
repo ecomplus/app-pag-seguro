@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { xmlToJson} = require('./js-to-xml')
-const baseURL = Boolean(process.env.PS_APP_SANDBOX) === true ? 'https://ws.sandbox.pagseguro.uol.com.br' : 'https://ws.pagseguro.uol.com.br'
+const baseURL = process.env.PS_APP_SANDBOX ? 'https://ws.sandbox.pagseguro.uol.com.br' : 'https://ws.pagseguro.uol.com.br'
 
 const instance = axios.create({
   baseURL,
