@@ -9,6 +9,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const { params, application } = req.body
 
   const sendPaymentGateways = ({ session, installmentOptions }) => {
+    console.log('sendPaymentGateways', new Date().toISOString())
     // app settings
     const config = Object.assign(application.data, application.hidden_data)
 
@@ -165,11 +166,12 @@ exports.post = ({ appSdk, admin }, req, res) => {
         }
       }
     }
-
+    console.log('response', new Date().toISOString())
     return res.send(response)
   }
 
   return pgGetAuth({ storeId, admin }).then(({ authorizationCode }) => {
+    console.log('GetAuth', new Date().toISOString())
     if (params.is_checkout_confirmation) {
       console.log(`Checkout #${req.storeId}`)
       return sendPaymentGateways({})
@@ -179,6 +181,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
         authorizationCode,
         method: 'post'
       }, true).then(data => {
+        console.log('session', new Date().toISOString())
         const { session } = data
         if (params.amount && params.amount.total) {
           return pgGetInstallments(session.id, params.amount.total)
@@ -187,6 +190,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
         return { session, installmentOptions: undefined }
       })
         .then(({ session, installmentOptions }) => {
+          console.log('getInstallments', new Date().toISOString())
           return sendPaymentGateways({ session: session.id, installmentOptions })
         })
     }
