@@ -43,6 +43,7 @@ jobs:
           SERVER_OPERATOR_TOKEN: ${{ secrets.SERVER_OPERATOR_TOKEN }}
           PS_APP_ID: ${{ secrets.PS_APP_ID }}
           PS_APP_KEY: ${{ secrets.PS_APP_KEY }}
+          PS_APP_SANDBOX: ${{ secrets.PS_APP_SANDBOX }}
         run: npm run deploy
 
   update-app-json:
