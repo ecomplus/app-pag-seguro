@@ -1,5 +1,5 @@
 const axios = require('axios')
-const env = Boolean(process.env.PS_APP_SANDBOX) === true ? 'sandbox.' : ''
+const env = process.env.PS_APP_SANDBOX === true ? 'sandbox.' : ''
 
 module.exports = (session, amount, brand = 'visa') => {
   const url = `https://${env}pagseguro.uol.com.br/checkout/v2/installments.json?` +
