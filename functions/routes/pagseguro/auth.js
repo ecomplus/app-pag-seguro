@@ -39,7 +39,7 @@ exports.get = ({ appSdk }, req, res) => {
     data: xml
   }, true).then(({ authorizationRequest }) => {
     const { code } = authorizationRequest
-    const env = Boolean(process.env.PS_APP_SANDBOX) === true ? 'sandbox.' : ''
+    const env = process.env.PS_APP_SANDBOX ? 'sandbox.' : ''
     const redirectTo = `https://${env}pagseguro.uol.com.br/v2/authorization/request.jhtml?code=${code}`
     return res.redirect(redirectTo)
   }).catch(e => {
