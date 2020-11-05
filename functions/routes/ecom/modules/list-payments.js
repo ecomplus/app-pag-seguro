@@ -37,7 +37,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
       }
     }
 
-    const mode = Boolean(process.env.PS_APP_SANDBOX) === true ? '-sandbox' : ''
+    const mode = process.env.PS_APP_SANDBOX === true ? '-sandbox' : ''
     let onloadFunction = `window.pagseguroSessionId="${session}";`
     if (installmentOptions && installmentOptions.installments) {
       const installmentsJson = JSON.stringify(installmentOptions.installments.visa)
