@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '10.24.1'
 
       - name: Install root dependencies
         run: npm i --only=production
@@ -101,7 +101,7 @@ jobs:
         if: steps.pkg_version.outputs.publish == 1
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '12.22.12'
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Cache dependencies
